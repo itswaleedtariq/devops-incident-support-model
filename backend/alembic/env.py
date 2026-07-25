@@ -44,9 +44,10 @@ if str(_backend_dir) not in sys.path:
 from app.config.settings import settings          # noqa: E402
 from app.database.base import Base                # noqa: E402
 
-# Import all model modules here so their tables appear in Base.metadata.
-# Example (Milestone 2.2):
-#   from app.models import incident  # noqa: F401
+# Import the models package so every table is registered with Base.metadata.
+# Alembic's --autogenerate compares Base.metadata against the live schema
+# to detect additions, removals, and column changes.
+import app.models  # noqa: F401
 
 # ---------------------------------------------------------------------------
 # Alembic config object
