@@ -49,7 +49,20 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:  # noqa: ARG001
         settings.APP_VERSION,
         settings.APP_ENV,
     )
+
+    # ------------------------------------------------------------------
+    # Startup: initialise database engine
+    # ------------------------------------------------------------------
+    from app.database.database import db_manager
+
+    await db_manager.connect()
+
     yield
+
+    # ------------------------------------------------------------------
+    # Shutdown: dispose database engine
+    # ------------------------------------------------------------------
+    await db_manager.disconnect()
     logger.info("Shutting down %s.", settings.APP_NAME)
 
 

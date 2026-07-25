@@ -47,6 +47,7 @@ class HealthData(BaseModel):
 
     status: str
     version: str
+    database: str  # "connected" | "disconnected"
 
 
 class RootData(BaseModel):

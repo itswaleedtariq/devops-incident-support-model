@@ -2,6 +2,9 @@
 Tests for the health check endpoint.
 
 Route: GET /api/v1/health
+
+Note: the database ``ping`` is mocked in ``conftest.py`` so these tests do
+not require a live PostgreSQL instance.
 """
 
 from __future__ import annotations
@@ -39,3 +42,8 @@ class TestHealthEndpoint:
         assert "version" in data
         assert isinstance(data["version"], str)
         assert len(data["version"]) > 0
+
+    def test_data_database_connected(self, client: TestClient) -> None:
+        """Database field should be 'connected' (mock returns True in conftest)."""
+        data = client.get("/api/v1/health").json()["data"]
+        assert data["database"] == "connected"

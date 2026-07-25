@@ -7,6 +7,33 @@ version: "3.9"
 services:
 
   # ----------------------------------------------------------
+  # PostgreSQL 16 — primary data store
+  # ----------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: devops-incident-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-devops_incident_db}
+      POSTGRES_USER: ${POSTGRES_USER:-devops_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devops_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-devops_user} -d ${POSTGRES_DB:-devops_incident_db}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ----------------------------------------------------------
   # Backend — FastAPI (Uvicorn)
   # ----------------------------------------------------------
   backend:
@@ -19,10 +46,19 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-development}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      # Override DATABASE_HOST to reach the postgres service by container name
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${POSTGRES_DB:-devops_incident_db}
+      DATABASE_USER: ${POSTGRES_USER:-devops_user}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-devops_password}
     ports:
       - "${PORT:-8000}:8000"
     volumes:
       - backend_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test:
@@ -35,10 +71,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 15s
 
   # ----------------------------------------------------------
-  # Frontend — React + Vite (Milestone 2 placeholder)
+  # Frontend — React + Vite (Milestone 2.2 placeholder)
   # ----------------------------------------------------------
   frontend:
     build:
@@ -53,5 +89,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  postgres_data:
+    driver: local
   backend_logs:
     driver: local
