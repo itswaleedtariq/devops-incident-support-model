@@ -24,6 +24,7 @@ from app.models.enums import (
 from app.models.feedback import Feedback
 from app.models.incident import Incident
 from app.models.mixins import SoftDeleteMixin, TimestampMixin, UUIDMixin
+from app.models.refresh_token import RefreshToken
 from app.models.role import Role
 from app.models.user import User
 
@@ -35,6 +36,7 @@ __all__ = [
     "Feedback",
     "Document",
     "EmbeddingMetadata",
+    "RefreshToken",
     # Enums
     "UserStatus",
     "IncidentStatus",

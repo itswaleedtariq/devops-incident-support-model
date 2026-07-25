@@ -15,6 +15,10 @@ from fastapi.testclient import TestClient
 
 # Force testing settings before importing the app.
 os.environ.setdefault("APP_ENV", "testing")
+# Use a deterministic JWT secret so signed tokens are reproducible across tests.
+os.environ.setdefault(
+    "JWT_SECRET_KEY", "unit-test-secret-key-please-do-not-use-in-production"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -57,22 +61,20 @@ def client() -> TestClient:
     """
     Provide a synchronous ``TestClient`` for the full application.
 
-    Session scope: the app is created once per pytest session, which is
-    faster and mirrors real production behaviour more closely.
-
     The database ``ping`` is mocked so unit tests do not require a live
-    PostgreSQL instance.  Use the ``db_integration`` mark for tests that
-    need a real database.
+    PostgreSQL instance.  Rate limiting is disabled to avoid HTTP 429
+    responses during rapid test bursts.
     """
-    # Import here to ensure APP_ENV is set first
     from app.config.settings import get_settings
     from app.main import create_app
 
     get_settings.cache_clear()
     application = create_app()
 
-    # Patch db_manager.ping so the health endpoint reports "healthy"
-    # without a live database during unit tests.
+    # Disable SlowAPI limiter for unit tests.
+    if hasattr(application.state, "limiter"):
+        application.state.limiter.enabled = False
+
     with patch(
         "app.database.database.db_manager.ping",
         new=AsyncMock(return_value=True),

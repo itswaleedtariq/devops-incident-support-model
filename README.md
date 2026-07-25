@@ -254,6 +254,14 @@ FastAPI auto-generates interactive API documentation:
 | [Architecture](docs/Architecture.md) | System design, layers, data flow |
 | [Project Structure](docs/Project_Structure.md) | Annotated directory tree |
 | [Development Guide](docs/Development_Guide.md) | Setup, testing, extending the project |
+| [Database](docs/Database.md) | PostgreSQL, SQLAlchemy, connection pool |
+| [Database Models](docs/Database_Models.md) | ERD, relationships, indexes |
+| [Authentication](docs/Authentication.md) | JWT flow, refresh tokens, password policy |
+| [Authorization](docs/Authorization.md) | RBAC, roles, permissions |
+| [Repositories](docs/Repositories.md) | Data-access layer |
+| [Services](docs/Services.md) | Business-logic layer |
+| [Security](docs/Security.md) | Hashing, JWT, headers, rate limiting |
+| [API Authentication (curl)](docs/API_Authentication.md) | Copy-paste examples |
 
 ---
 

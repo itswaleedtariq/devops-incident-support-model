@@ -60,8 +60,63 @@ class BaseAppSettings(BaseSettings):
     DB_USE_NULL_POOL: bool = False  # Use NullPool (for testing)
 
     # ------------------------------------------------------------------
+    # Security & JWT
+    # ------------------------------------------------------------------
+    # WARNING: JWT_SECRET_KEY MUST be overridden via env var in production.
+    JWT_SECRET_KEY: str = "CHANGE-ME-IN-PRODUCTION-USE-A-LONG-RANDOM-STRING"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    # bcrypt work factor — 12 is a good balance in 2026.
+    BCRYPT_ROUNDS: int = 12
+    # Password policy
+    PASSWORD_MIN_LENGTH: int = 8
+    PASSWORD_REQUIRE_UPPERCASE: bool = True
+    PASSWORD_REQUIRE_LOWERCASE: bool = True
+    PASSWORD_REQUIRE_DIGIT: bool = True
+    PASSWORD_REQUIRE_SPECIAL: bool = True
+
+    # ------------------------------------------------------------------
+    # CORS & Trusted Hosts
+    # ------------------------------------------------------------------
+    # Comma-separated origins.  "*" in dev only.
+    CORS_ALLOWED_ORIGINS: str = "*"
+    CORS_ALLOW_CREDENTIALS: bool = True
+    TRUSTED_HOSTS: str = "*"  # Comma-separated; "*" allows any Host header
+
+    # ------------------------------------------------------------------
+    # Rate limiting (SlowAPI)
+    # ------------------------------------------------------------------
+    RATE_LIMIT_ENABLED: bool = True
+    RATE_LIMIT_LOGIN: str = "5/minute"
+    RATE_LIMIT_REGISTER: str = "3/minute"
+    RATE_LIMIT_FORGOT_PASSWORD: str = "3/minute"
+    RATE_LIMIT_RESET_PASSWORD: str = "5/minute"
+    RATE_LIMIT_REFRESH: str = "20/minute"
+
+    # ------------------------------------------------------------------
     # Computed URLs (derived from the fields above)
     # ------------------------------------------------------------------
+    @computed_field  # type: ignore[misc]
+    @property
+    def cors_allowed_origins_list(self) -> list[str]:
+        """Parse the comma-separated ``CORS_ALLOWED_ORIGINS`` into a list."""
+        raw = (self.CORS_ALLOWED_ORIGINS or "").strip()
+        if not raw:
+            return []
+        if raw == "*":
+            return ["*"]
+        return [o.strip() for o in raw.split(",") if o.strip()]
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def trusted_hosts_list(self) -> list[str]:
+        """Parse the comma-separated ``TRUSTED_HOSTS`` into a list."""
+        raw = (self.TRUSTED_HOSTS or "").strip()
+        if not raw or raw == "*":
+            return ["*"]
+        return [h.strip() for h in raw.split(",") if h.strip()]
+
     @computed_field  # type: ignore[misc]
     @property
     def async_database_url(self) -> str:

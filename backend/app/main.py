@@ -30,8 +30,12 @@ from app.core.exceptions import (
     validation_exception_handler,
 )
 from app.core.logging import get_logger, setup_logging
+from app.core.rate_limit import limiter, rate_limit_exceeded_handler
 from app.middleware.logging_middleware import RequestLoggingMiddleware
+from app.middleware.security_headers import SecurityHeadersMiddleware
 from app.schemas.response import RootData, StandardResponse
+from slowapi.errors import RateLimitExceeded
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 
 # ---------------------------------------------------------------------------
@@ -102,15 +106,28 @@ def create_app() -> FastAPI:
     )
 
     # ------------------------------------------------------------------
+    # Rate limiter — bind SlowAPI's limiter to the FastAPI app.
+    # ------------------------------------------------------------------
+    application.state.limiter = limiter
+    application.add_exception_handler(
+        RateLimitExceeded, rate_limit_exceeded_handler  # type: ignore[arg-type]
+    )
+
+    # ------------------------------------------------------------------
     # Middleware  (first added = outermost wrapper)
     # ------------------------------------------------------------------
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # TODO(milestone-2): restrict to known frontend origins
-        allow_credentials=True,
+        allow_origins=settings.cors_allowed_origins_list,
+        allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    application.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=settings.trusted_hosts_list,
+    )
+    application.add_middleware(SecurityHeadersMiddleware)
     application.add_middleware(RequestLoggingMiddleware)
 
     # ------------------------------------------------------------------

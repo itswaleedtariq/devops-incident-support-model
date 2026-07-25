@@ -28,3 +28,28 @@ class DomainValidationError(AppBaseException):
 
 class ServiceError(AppBaseException):
     """Raised when a service-layer operation fails."""
+
+
+class DuplicateResourceError(AppBaseException):
+    """Raised when creating a resource that already exists (unique constraint)."""
+
+
+class InvalidCredentialsError(AppBaseException):
+    """Raised when login credentials do not match a stored user."""
+
+
+class InactiveUserError(AppBaseException):
+    """Raised when authentication succeeds but the user account is disabled."""
+
+
+class InvalidTokenError(AppBaseException):
+    """Raised when a supplied token is malformed, expired, or revoked."""
+
+
+class PermissionDeniedError(AppBaseException):
+    """Raised when a user lacks the required permission for an operation."""
+
+
+class WeakPasswordError(AppBaseException):
+    """Raised when a supplied password fails the strength policy."""
+
