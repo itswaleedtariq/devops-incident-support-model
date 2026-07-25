@@ -216,3 +216,45 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ============================================================
+# DevOps Incident Support Model — project-specific
+# ============================================================
+
+# Application logs
+logs/
+*.log
+
+# Virtual environments (backend)
+backend/.venv/
+backend/venv/
+
+# Test artefacts
+.pytest_cache/
+backend/.pytest_cache/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.cache/
+
+# ML model weights (large binary files)
+models/*.bin
+models/*.gguf
+models/*.safetensors
+models/*.pt
+models/*.pth
+
+# Data (large datasets — keep only .gitkeep)
+data/raw/*
+data/cleaned/*
+data/training/*
+data/validation/*
+data/testing/*
+!data/**/.gitkeep
+
+# ChromaDB local store
+chroma_db/
+
+# Docker build context
+.docker/

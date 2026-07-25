@@ -1,0 +1,57 @@
+version: "3.9"
+
+# ============================================================
+# DevOps Incident Support Model — Docker Compose
+# ============================================================
+
+services:
+
+  # ----------------------------------------------------------
+  # Backend — FastAPI (Uvicorn)
+  # ----------------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: devops-incident-backend
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "${PORT:-8000}:8000"
+    volumes:
+      - backend_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ----------------------------------------------------------
+  # Frontend — React + Vite (Milestone 2 placeholder)
+  # ----------------------------------------------------------
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: devops-incident-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  backend_logs:
+    driver: local
