@@ -20,7 +20,7 @@ PYTHON  := python
 SCRIPTS := scripts/db.py
 PYTEST  := python -m pytest
 
-.PHONY: migrate rollback reset seed current history check test test-int
+.PHONY: migrate rollback reset seed current history check test test-cov test-int validate-data
 
 ## Apply all pending Alembic migrations
 migrate:
@@ -62,3 +62,11 @@ test-int:
 ## Create a new migration — usage: make create-migration MSG="add column foo"
 create-migration:
 	$(PYTHON) $(SCRIPTS) create-migration -m "$(MSG)"
+
+## Run unit tests with branch coverage
+test-cov:
+	$(PYTEST) -v --cov=app --cov-report=term-missing --cov-report=html
+
+## Validate all committed dataset splits
+validate-data:
+	$(PYTHON) scripts/validate_dataset.py --all

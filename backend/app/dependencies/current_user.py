@@ -10,7 +10,7 @@ Authentication dependencies.
 from __future__ import annotations
 
 import uuid
-from typing import Callable, Coroutine
+from typing import Any, Callable, Coroutine
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -20,8 +20,6 @@ from app.dependencies.services import get_token_service, get_user_service
 from app.exceptions import InvalidTokenError
 from app.models.user import User
 from app.services.permission_service import PermissionService
-from app.services.token_service import TokenService
-from app.services.user_service import UserService
 
 # Reusable HTTP Bearer scheme — surfaces in Swagger UI as a lock icon.
 _bearer_scheme = HTTPBearer(auto_error=False)
@@ -29,8 +27,8 @@ _bearer_scheme = HTTPBearer(auto_error=False)
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),
-    token_service: TokenService = Depends(get_token_service),
-    user_service: UserService = Depends(get_user_service),
+    token_service: Any = Depends(get_token_service),
+    user_service: Any = Depends(get_user_service),
 ) -> User:
     """
     Decode the Bearer access token and return the authenticated user.

@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "categories": [
+    {
+      "id": "docker",
+      "label": "Docker",
+      "description": "Images, containers, Compose, networking and volumes."
+    },
+    {
+      "id": "github_actions",
+      "label": "GitHub Actions",
+      "description": "Workflow, runner, dependency and CI failures."
+    },
+    {
+      "id": "linux",
+      "label": "Linux",
+      "description": "Processes, permissions, services, packages, storage and networking."
+    },
+    {
+      "id": "nginx",
+      "label": "NGINX",
+      "description": "Reverse proxy, TLS, upstream and configuration failures."
+    },
+    {
+      "id": "gunicorn",
+      "label": "Gunicorn",
+      "description": "Worker, socket, service and WSGI startup failures."
+    },
+    {
+      "id": "kubernetes",
+      "label": "Kubernetes",
+      "description": "Pods, deployments, services, configuration and scheduling."
+    },
+    {
+      "id": "django",
+      "label": "Django",
+      "description": "Application configuration, migrations, static files and deployment."
+    }
+  ]
+}

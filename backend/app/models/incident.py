@@ -2,7 +2,7 @@
 Incident ORM model.
 
 An ``Incident`` represents a DevOps failure event submitted by an engineer.
-The AI pipeline (Milestone 4) analyses incidents and generates remediation
+The AI pipeline (Milestone 10) analyses incidents and generates remediation
 guidance that is stored alongside the incident record.
 
 Table: ``incidents``

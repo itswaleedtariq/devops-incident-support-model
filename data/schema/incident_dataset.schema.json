@@ -1,0 +1,325 @@
+{
+  "$defs": {
+    "ActionType": {
+      "enum": [
+        "diagnostic",
+        "modification",
+        "verification"
+      ],
+      "title": "ActionType",
+      "type": "string"
+    },
+    "DatasetInput": {
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "maxLength": 500,
+          "minLength": 2,
+          "title": "Environment",
+          "type": "string"
+        },
+        "incident_description": {
+          "maxLength": 20000,
+          "minLength": 10,
+          "title": "Incident Description",
+          "type": "string"
+        },
+        "logs": {
+          "maxLength": 200000,
+          "minLength": 3,
+          "title": "Logs",
+          "type": "string"
+        },
+        "recent_changes": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recent Changes"
+        },
+        "expected_behavior": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Behavior"
+        },
+        "commands_already_tried": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Commands Already Tried",
+          "type": "array"
+        }
+      },
+      "required": [
+        "environment",
+        "incident_description",
+        "logs"
+      ],
+      "title": "DatasetInput",
+      "type": "object"
+    },
+    "DatasetMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "source_type": {
+          "$ref": "#/$defs/SourceType"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "license": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "License"
+        },
+        "reviewed": {
+          "default": false,
+          "title": "Reviewed",
+          "type": "boolean"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source_type"
+      ],
+      "title": "DatasetMetadata",
+      "type": "object"
+    },
+    "DatasetOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "problem_category": {
+          "$ref": "#/$defs/IncidentCategory"
+        },
+        "probable_causes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Probable Causes",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "recommended_steps": {
+          "items": {
+            "$ref": "#/$defs/RecommendedStep"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Recommended Steps",
+          "type": "array"
+        },
+        "risk_level": {
+          "$ref": "#/$defs/DatasetRiskLevel"
+        },
+        "verification_steps": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Verification Steps",
+          "type": "array"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "missing_information": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Missing Information",
+          "type": "array"
+        }
+      },
+      "required": [
+        "problem_category",
+        "probable_causes",
+        "evidence",
+        "recommended_steps",
+        "risk_level",
+        "verification_steps",
+        "confidence"
+      ],
+      "title": "DatasetOutput",
+      "type": "object"
+    },
+    "DatasetRiskLevel": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "DatasetRiskLevel",
+      "type": "string"
+    },
+    "IncidentCategory": {
+      "enum": [
+        "docker",
+        "github_actions",
+        "linux",
+        "nginx",
+        "gunicorn",
+        "kubernetes",
+        "django"
+      ],
+      "title": "IncidentCategory",
+      "type": "string"
+    },
+    "RecommendedStep": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Command"
+        },
+        "purpose": {
+          "maxLength": 2000,
+          "minLength": 5,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "action_type": {
+          "$ref": "#/$defs/ActionType"
+        },
+        "risk": {
+          "$ref": "#/$defs/DatasetRiskLevel"
+        },
+        "requires_confirmation": {
+          "default": false,
+          "title": "Requires Confirmation",
+          "type": "boolean"
+        },
+        "warning": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warning"
+        }
+      },
+      "required": [
+        "purpose",
+        "action_type",
+        "risk"
+      ],
+      "title": "RecommendedStep",
+      "type": "object"
+    },
+    "SourceType": {
+      "enum": [
+        "manual",
+        "synthetic",
+        "public_documentation",
+        "public_issue",
+        "internal_incident"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One JSONL record used for supervised fine-tuning and evaluation.",
+  "properties": {
+    "id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{5,99}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "instruction": {
+      "maxLength": 2000,
+      "minLength": 20,
+      "title": "Instruction",
+      "type": "string"
+    },
+    "input": {
+      "$ref": "#/$defs/DatasetInput"
+    },
+    "output": {
+      "$ref": "#/$defs/DatasetOutput"
+    },
+    "metadata": {
+      "$ref": "#/$defs/DatasetMetadata"
+    }
+  },
+  "required": [
+    "id",
+    "instruction",
+    "input",
+    "output",
+    "metadata"
+  ],
+  "title": "DatasetRecord",
+  "type": "object"
+}

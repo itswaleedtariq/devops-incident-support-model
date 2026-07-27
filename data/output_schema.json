@@ -1,0 +1,27 @@
+{
+  "problem_category": "docker | github_actions | linux | nginx | gunicorn | kubernetes | django",
+  "probable_causes": [
+    "One or more ranked hypotheses"
+  ],
+  "evidence": [
+    "Statements grounded in supplied logs"
+  ],
+  "recommended_steps": [
+    {
+      "command": "Optional command",
+      "purpose": "Why this step is needed",
+      "action_type": "diagnostic | modification | verification",
+      "risk": "low | medium | high | critical",
+      "requires_confirmation": false,
+      "warning": "Required for high/critical-risk steps"
+    }
+  ],
+  "risk_level": "low | medium | high | critical",
+  "verification_steps": [
+    "How to confirm recovery"
+  ],
+  "confidence": "0.0 to 1.0",
+  "missing_information": [
+    "Evidence still required"
+  ]
+}

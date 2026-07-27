@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "risk_levels": [
+    {
+      "id": "low",
+      "description": "Read-only inspection or negligible service impact."
+    },
+    {
+      "id": "medium",
+      "description": "Configuration or restart action with limited recoverable impact."
+    },
+    {
+      "id": "high",
+      "description": "Potential downtime, resource deletion or production-wide impact."
+    },
+    {
+      "id": "critical",
+      "description": "Likely data loss, credential compromise or destructive irreversible impact."
+    }
+  ]
+}

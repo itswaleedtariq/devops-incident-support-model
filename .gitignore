@@ -245,13 +245,14 @@ models/*.safetensors
 models/*.pt
 models/*.pth
 
-# Data (large datasets — keep only .gitkeep)
+# Large collected/generated datasets (Milestone 5+)
 data/raw/*
 data/cleaned/*
 data/training/*
 data/validation/*
 data/testing/*
 !data/**/.gitkeep
+# Milestone 4 schema and small reviewed JSONL examples at data/ root are tracked.
 
 # ChromaDB local store
 chroma_db/

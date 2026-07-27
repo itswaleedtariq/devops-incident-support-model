@@ -1,10 +1,12 @@
-"""
-Schemas package.
-
-Exposes the standard response envelope and payload models.
-"""
+"""Public schema exports."""
 
 from app.schemas.common import PaginatedResponse, PaginationParams
+from app.schemas.incident import (
+    IncidentCreate,
+    IncidentRead,
+    IncidentStatusUpdate,
+    IncidentUpdate,
+)
 from app.schemas.response import HealthData, RootData, StandardResponse
 
 __all__ = [
@@ -13,4 +15,8 @@ __all__ = [
     "StandardResponse",
     "PaginationParams",
     "PaginatedResponse",
+    "IncidentCreate",
+    "IncidentRead",
+    "IncidentStatusUpdate",
+    "IncidentUpdate",
 ]

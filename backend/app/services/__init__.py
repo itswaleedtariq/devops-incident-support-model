@@ -1,19 +1,15 @@
-"""
-Services package (business-logic layer).
+"""Business-logic service modules.
 
-Public exports for convenient importing.
+Services are intentionally not imported eagerly here. Keeping this package
+lightweight avoids loading optional authentication/cryptography dependencies
+when a caller only needs the incident or dataset service.
 """
-
-from app.services.auth_service import AuthService
-from app.services.password_service import PasswordService
-from app.services.permission_service import PermissionService
-from app.services.token_service import TokenService
-from app.services.user_service import UserService
 
 __all__ = [
-    "AuthService",
-    "PasswordService",
-    "PermissionService",
-    "TokenService",
-    "UserService",
+    "auth_service",
+    "incident_service",
+    "password_service",
+    "permission_service",
+    "token_service",
+    "user_service",
 ]

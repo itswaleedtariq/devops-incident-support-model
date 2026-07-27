@@ -1,0 +1,17 @@
+[run]
+branch = True
+source = app
+omit =
+    app/database/seed.py
+
+[report]
+show_missing = True
+skip_covered = False
+precision = 1
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    raise NotImplementedError
+
+[html]
+directory = htmlcov

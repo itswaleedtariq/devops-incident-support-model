@@ -220,36 +220,10 @@ _SETTINGS_MAP: dict[str, type[BaseAppSettings]] = {
 
 @lru_cache(maxsize=1)
 def get_settings() -> BaseAppSettings:
-    """
-    Return the settings instance for the current environment.
-
-    The instance is cached so the ``.env`` file is read only once per process.
-    Clear the cache with ``get_settings.cache_clear()`` in tests that need to
-    override environment variables.
-    """
+    """Return the cached settings instance for the selected APP_ENV."""
     env = os.getenv("APP_ENV", "development")
     settings_class = _SETTINGS_MAP.get(env, DevelopmentSettings)
     return settings_class()
 
 
-# Module-level singleton used throughout the application.
-settings: BaseAppSettings = get_settings()
-
-
-
-@lru_cache(maxsize=1)
-def get_settings() -> BaseAppSettings:
-    """
-    Return the settings instance for the current environment.
-
-    The instance is cached so the ``.env`` file is read only once per process.
-    Clear the cache with ``get_settings.cache_clear()`` in tests that need to
-    override environment variables.
-    """
-    env = os.getenv("APP_ENV", "development")
-    settings_class = _SETTINGS_MAP.get(env, DevelopmentSettings)
-    return settings_class()
-
-
-# Module-level singleton used throughout the application.
 settings: BaseAppSettings = get_settings()
